@@ -1,6 +1,6 @@
 <?php
 
-namespace Honda\Tables\Concerns;
+namespace Honda\Table\Concerns;
 
 trait HandlesTypes
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Honda\Tables\Support;
+namespace Honda\Table\Support;
 
 use InvalidArgumentException;
 

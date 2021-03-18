@@ -1,6 +1,6 @@
 <?php
 
-namespace Honda\Tables;
+namespace Honda\Table;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;

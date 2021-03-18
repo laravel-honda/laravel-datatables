@@ -1,10 +1,10 @@
 <?php
 
-namespace Honda\Tables;
+namespace Honda\Table;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Honda\Tables\Concerns\HandlesTypes;
+use Honda\Table\Concerns\HandlesTypes;
 
 class Column
 {

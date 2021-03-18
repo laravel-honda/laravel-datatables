@@ -1,6 +1,6 @@
 @php
 
-    $flag = (new \Honda\Tables\Support\CountryFlag())->get($convertToIso3166($value))
+    $flag = (new \Honda\Table\Support\CountryFlag())->get($convertToIso3166($value))
 
 @endphp
 
