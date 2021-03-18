@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Honda\\Tables\\": "src/"
+            "Honda\\Table\\": "src/"
         }
     },
     "autoload-dev": {
@@ -48,7 +48,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Honda\\Tables\\TablesServiceProvider"
+                "Honda\\Table\\TablesServiceProvider"
             ]
         }
     },

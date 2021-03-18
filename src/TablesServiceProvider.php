@@ -2,6 +2,7 @@
 
 namespace Honda\Table;
 
+use Honda\Table\Commands\TableMakeCommand;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
@@ -15,6 +16,8 @@ class TablesServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tables');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tables');
         $this->mergeConfigFrom(__DIR__ . '/../config/tables.php', 'tables');
+
+        $this->commands([TableMakeCommand::class]);
 
         if (!File::exists(config('tables.path'))) {
             return;
