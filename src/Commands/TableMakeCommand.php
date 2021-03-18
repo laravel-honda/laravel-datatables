@@ -14,7 +14,7 @@ class TableMakeCommand extends Command
 
     public function handle(): void
     {
-        $path = config('tables.path') . $this->getModel() . 'Table.php';
+        $path = config('tables.path') . '/' . $this->getModel() . 'Table.php';
 
         if (file_exists($path)) {
             $this->error('View already exists!');
