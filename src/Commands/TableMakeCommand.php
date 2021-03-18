@@ -16,6 +16,10 @@ class TableMakeCommand extends Command
     {
         $path = config('tables.path') . '/' . $this->getModel() . 'Table.php';
 
+        if (!mkdir($concurrentDirectory = config('tables.path')) && !is_dir($concurrentDirectory)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+        }
+
         if (file_exists($path)) {
             $this->error('View already exists!');
 
@@ -40,8 +44,8 @@ class TableMakeCommand extends Command
 
     public function getTableContents(): string
     {
-        $model = $this->getModel();
-        $class = $model . 'Table';
+        $model          = $this->getModel();
+        $class          = $model . 'Table';
         $tableNamespace = config('tables.namespace');
         $modelNamespace = config('tables_model_namespace');
 
