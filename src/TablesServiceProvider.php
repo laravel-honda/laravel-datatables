@@ -46,7 +46,7 @@ class TablesServiceProvider extends ServiceProvider
         ], 'tables-views');
 
         $this->publishes([
-            __DIR__ . '/../config/datatables.php' => config_path('datatables.php'),
+            __DIR__ . '/../config/tables.php' => config_path('tables.php'),
         ], 'tables-config');
     }
 }
