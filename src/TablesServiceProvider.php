@@ -19,21 +19,19 @@ class TablesServiceProvider extends ServiceProvider
 
         $this->commands([TableMakeCommand::class]);
 
-        if (!File::exists(config('tables.path'))) {
-            return;
+        if (File::exists(config('tables.path'))) {
+            collect(File::files(config('tables.path')))->each(function (SplFileInfo $file) {
+                $alias = strtolower(
+                    preg_replace(
+                        '/[A-Z]/',
+                        '-$0',
+                        lcfirst($file->getFilenameWithoutExtension())
+                    )
+                );
+
+                Livewire::component($alias, config('tables.namespace') . $file->getFilenameWithoutExtension());
+            });
         }
-
-        collect(File::files(config('tables.path')))->each(function (SplFileInfo $file) {
-            $alias = strtolower(
-                preg_replace(
-                    '/[A-Z]/',
-                    '-$0',
-                    lcfirst($file->getFilenameWithoutExtension())
-                )
-            );
-
-            Livewire::component($alias, config('tables.namespace') . $file->getFilenameWithoutExtension());
-        });
 
         if (!$this->app->runningInConsole()) {
             return;
