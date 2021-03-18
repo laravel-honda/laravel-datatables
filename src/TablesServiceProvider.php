@@ -1,7 +1,6 @@
 <?php
 
-
-namespace Starts\Tables;
+namespace Honda\Tables;
 
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
@@ -49,5 +48,4 @@ class TablesServiceProvider extends ServiceProvider
             __DIR__ . '/../config/datatables.php' => config_path('datatables.php'),
         ], 'tables-config');
     }
-
 }

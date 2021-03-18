@@ -1,6 +1,6 @@
 <?php
 
-namespace Starts\Tables\Components;
+namespace Honda\Tables\Components;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;

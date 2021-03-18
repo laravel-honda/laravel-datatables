@@ -1,6 +1,6 @@
 <?php
 
-namespace Starts\Tables\Support;
+namespace Honda\Tables\Support;
 
 use InvalidArgumentException;
 
@@ -37,7 +37,6 @@ class CountryFlag
         if (array_key_exists($countryCode, $this->aliases)) {
             $countryCode = $this->aliases[$countryCode];
         }
-
 
         return implode('', array_map([$this, 'toUnicode'], str_split($countryCode)));
     }

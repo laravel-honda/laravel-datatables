@@ -1,6 +1,6 @@
 <?php
 
-namespace Starts\Tables;
+namespace Honda\Tables;
 
 use Illuminate\Database\Eloquent\Model;
 

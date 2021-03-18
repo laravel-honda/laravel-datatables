@@ -1,6 +1,11 @@
 {
-    "name": "starts/table",
-    "description": "A skeleton repository for my packages",
+    "name": "honda/laravel-datatables",
+    "description": "laravel-datatables",
+    "keywords": [
+        "honda",
+        "datatables",
+        "laravel"
+    ],
     "license": "MIT",
     "authors": [
         {
@@ -26,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Starts\\Tables\\": "src/"
+            "Honda\\Tables\\": "src/"
         }
     },
     "autoload-dev": {
@@ -43,7 +48,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Starts\\Tables\\TablesServiceProvider"
+                "Honda\\Tables\\TablesServiceProvider"
             ]
         }
     },

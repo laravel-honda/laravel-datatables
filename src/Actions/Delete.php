@@ -1,11 +1,9 @@
 <?php
 
-
-namespace Starts\Tables\Actions;
-
+namespace Honda\Tables\Actions;
 
 use Illuminate\Database\Eloquent\Model;
-use Starts\Tables\Action;
+use Honda\Tables\Action;
 
 class Delete extends Action
 {
