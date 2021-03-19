@@ -29,7 +29,7 @@ class TablesServiceProvider extends ServiceProvider
                     ) ?? ''
                 );
 
-                Livewire::component($alias, config('tables.namespace') . $file->getFilenameWithoutExtension());
+                Livewire::component($alias, config('tables.namespace') . '\\' . $file->getFilenameWithoutExtension());
             });
         }
 
