@@ -3,6 +3,7 @@
 namespace Honda\Table\Commands;
 
 use Illuminate\Console\Command;
+use RuntimeException;
 
 class TableMakeCommand extends Command
 {
@@ -16,14 +17,14 @@ class TableMakeCommand extends Command
     {
         $path = config('tables.path') . '/' . $this->getModel() . 'Table.php';
 
-        if (!mkdir($concurrentDirectory = config('tables.path')) && !is_dir($concurrentDirectory)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-        }
-
         if (file_exists($path)) {
             $this->error('View already exists!');
 
             return;
+        }
+
+        if (!mkdir($concurrentDirectory = config('tables.path')) && !is_dir($concurrentDirectory)) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         file_put_contents($path, $this->getTableContents());
@@ -57,6 +58,7 @@ namespace $tableNamespace;
 
 use $modelNamespace\\$model;
 use Honda\Table\Components\Table;
+
 class {$class} extends Table
 {
     public string \$model = $model::class;
