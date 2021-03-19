@@ -13,7 +13,7 @@ abstract class Table extends Component
 {
     use WithPagination;
 
-    protected static $model;
+    protected static string $model;
     public $search;
     public $recordsPerPage = 15;
     public $sortColumn     = null;
