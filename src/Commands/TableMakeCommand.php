@@ -61,7 +61,7 @@ use Honda\Table\Components\Table;
 
 class {$class} extends Table
 {
-    public string \$model = $model::class;
+    public static string \$model = $model::class;
 
     public function columns(): array {
         return [
