@@ -47,16 +47,16 @@ class TableMakeCommand extends Command
         $model          = $this->getModel();
         $class          = $model . 'Table';
         $tableNamespace = config('tables.namespace');
-        $modelNamespace = config('tables.model_namespace');
+        $modelNamespace = config('tables.models_namespace');
 
         return <<<EOF
 <?php
 
 namespace $tableNamespace;
 
-use Honda\Table\Table;
-use $modelNamespace\\$model;
 
+use $modelNamespace\\$model;
+use Honda\Table\Components\Table;
 class {$class} extends Table
 {
     public string \$model = $model::class;
