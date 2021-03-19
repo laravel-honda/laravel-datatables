@@ -2,8 +2,8 @@
 
 namespace Honda\Table\Actions;
 
-use Illuminate\Database\Eloquent\Model;
 use Honda\Table\Action;
+use Illuminate\Database\Eloquent\Model;
 
 class Edit extends Action
 {

@@ -8,13 +8,24 @@ class CountryFlag
 {
     public const INDICATOR_OFFSET = 127397;
 
+    /**
+     * @var array<string, string>
+     */
     protected array $aliases = [];
 
+    /**
+     * @param array<string, string> $aliases
+     */
     public function __construct(array $aliases = [])
     {
         $this->setAliases($aliases);
     }
 
+    /**
+     * @param array<string, string> $aliases
+     *
+     * @return $this
+     */
     public function setAliases(array $aliases): self
     {
         $this->aliases = [];

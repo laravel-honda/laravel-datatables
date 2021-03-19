@@ -4,10 +4,13 @@ namespace Honda\Table\Concerns;
 
 trait HandlesTypes
 {
-    public string $kind         = 'default';
+    public string $kind = 'default';
+    /**
+     * @var array<string, mixed>
+     */
     protected array $attributes = [];
 
-    public function asDate($format = 'F j, Y'): self
+    public function asDate(string $format = 'F j, Y'): self
     {
         $this->kind       = 'date';
         $this->attributes = compact('format');
@@ -15,7 +18,7 @@ trait HandlesTypes
         return $this;
     }
 
-    public function asDateTime($format = 'F j, Y H:i:s'): self
+    public function asDateTime(string $format = 'F j, Y H:i:s'): self
     {
         $this->kind       = 'date';
         $this->attributes = compact('format');
@@ -23,7 +26,7 @@ trait HandlesTypes
         return $this;
     }
 
-    public function asTime($format = 'H:i'): self
+    public function asTime(string $format = 'H:i'): self
     {
         $this->kind       = 'date';
         $this->attributes = compact('format');

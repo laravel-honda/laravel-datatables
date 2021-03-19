@@ -2,6 +2,8 @@
 
 namespace Honda\Table\Components;
 
+use Honda\Table\Action;
+use Honda\Table\Column;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Str;
 use Livewire\Component;
@@ -25,7 +27,7 @@ abstract class Table extends Component
         'page'           => ['except' => 1],
     ];
 
-    public function sortBy($column)
+    public function sortBy($column): void
     {
         if ($this->sortColumn === $column) {
             switch ($this->sortDirection) {
@@ -47,7 +49,7 @@ abstract class Table extends Component
         $this->sortDirection = 'asc';
     }
 
-    public function selectAll()
+    public function selectAll(): void
     {
         $records = $this->records()->get();
 
@@ -116,14 +118,17 @@ abstract class Table extends Component
         return collect($this->columns())->filter->searchable->isNotEmpty();
     }
 
+    /**
+     * @return Column[]
+     */
     abstract public function columns(): array;
 
-    public function updatedRecordsPerPage()
+    public function updatedRecordsPerPage(): void
     {
         $this->resetPage();
     }
 
-    public function updatedSearch()
+    public function updatedSearch(): void
     {
         $this->selected = [];
 
@@ -151,12 +156,15 @@ abstract class Table extends Component
         ]);
     }
 
+    /**
+     * @return Action[]
+     */
     public function actions(): array
     {
         return [];
     }
 
-    public function paginationView()
+    public function paginationView(): string
     {
         return 'tables::pagination';
     }
@@ -171,7 +179,7 @@ abstract class Table extends Component
         return $action->run($record);
     }
 
-    public function bulkAction($action)
+    public function bulkAction(string $action): void
     {
         $records = $this->records()->whereIn('id', $this->selected)->get();
         $action  = $this->actions()[$action];

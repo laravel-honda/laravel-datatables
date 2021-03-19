@@ -2,9 +2,9 @@
 
 namespace Honda\Table;
 
+use Honda\Table\Concerns\HandlesTypes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use Honda\Table\Concerns\HandlesTypes;
 
 class Column
 {

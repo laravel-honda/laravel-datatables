@@ -26,7 +26,7 @@ class TablesServiceProvider extends ServiceProvider
                         '/[A-Z]/',
                         '-$0',
                         lcfirst($file->getFilenameWithoutExtension())
-                    )
+                    ) ?? ''
                 );
 
                 Livewire::component($alias, config('tables.namespace') . $file->getFilenameWithoutExtension());
