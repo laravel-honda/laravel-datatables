@@ -3,20 +3,21 @@
         @if ($this->hasAnySearchableColumns())
             <div class="w-full">
                 <div class="flex flex-col">
-                    <label class="text-gray-500 text-sm" for="search">Search</label>
-                    <input type="search" wire:model="search" id="search" name="search"
-                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 text-gray-700"
+                    <label class="text-gray-500 text-sm sr-only" for="search">Search</label>
+                    <input type="search" wire:model="search" id="search" name="search" placeholder="{{ __('Search') }}"
+                           class="form-input mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 text-gray-700"
                     />
                 </div>
             </div>
         @endif
         <div class="@if ($this->hasAnySearchableColumns()) ml-4 @endif">
             <div class="flex flex-col">
-                <label class="text-gray-500 text-sm whitespace-nowrap" for="resultsPerPage">Results per page</label>
+                <label class="text-gray-500 text-sm whitespace-nowrap  sr-only"
+                       for="resultsPerPage">{{ __('Results per page') }}</label>
                 <select
                     id="resultsPerPage"
                     name="resultsPerPage"
-                    class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 text-gray-700"
+                    class="form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 text-gray-700"
                     wire:model="recordsPerPage">
                     <option value="10">10</option>
                     <option value="15">15</option>
@@ -133,7 +134,13 @@
         </div>
     @else
         <div class="p-4 rounded-lg bg-white border mt-4 text-gray-700">
-            <h1 class="">No results found for "{{ $search }}".</h1>
+            <h1 class="">
+                @empty($search)
+                    {{ __('No results') }}
+                @else
+                    {{ __('No results found for') }} "{{ $search }}".
+                @endempty
+            </h1>
         </div>
     @endif
 </div>

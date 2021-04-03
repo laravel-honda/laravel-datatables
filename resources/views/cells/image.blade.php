@@ -1,6 +1,7 @@
 @php
     $disk ??= config('filesystems.default')
 @endphp
+
 <a href="{{ Storage::disk($disk)->url($value) }}">
     <img
         src="{{ Storage::disk($disk)->url($value) }}"
