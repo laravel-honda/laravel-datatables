@@ -3,7 +3,7 @@
 namespace Honda\Table\Commands;
 
 use Illuminate\Console\Command;
-use RuntimeException;
+use Illuminate\Support\Facades\File;
 
 class TableMakeCommand extends Command
 {
@@ -23,9 +23,7 @@ class TableMakeCommand extends Command
             return;
         }
 
-        if (!mkdir($concurrentDirectory = config('tables.path')) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-        }
+        File::makeDirectory(config('tables.path'), 0755, true);
 
         file_put_contents($path, $this->getTableContents());
 
