@@ -13,7 +13,7 @@ class Edit extends Action
         $linkBuilder ??= function (Model $model) {
             $modelName = strtolower(class_basename(get_class($model)));
 
-            return route($modelName . '.' . 'edit', [
+            return route(\Str::plural($modelName) . '.' . 'edit', [
                 $modelName => $model,
             ]);
         };
