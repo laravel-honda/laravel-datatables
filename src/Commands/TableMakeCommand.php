@@ -23,7 +23,7 @@ class TableMakeCommand extends Command
             return;
         }
 
-        File::makeDirectory(config('tables.path'), 0755, true);
+        File::ensureDirectoryExists(config('tables.path'), 0755, true);
 
         file_put_contents($path, $this->getTableContents());
 
