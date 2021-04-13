@@ -115,7 +115,11 @@
                                         @elseif($column->shouldRender())
                                             <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="text-gray-500 text-sm">
-                                            {{ $column->renderCell($record) }}
+                                                @if (empty($record->{$column->name}) && $column->kind !== 'boolean')
+                                                    ({{__('blank')}})
+                                                @else
+                                                    {{ $column->renderCell($record) }}
+                                                @endif
                                         </span>
                                             </td>
                                         @endif
