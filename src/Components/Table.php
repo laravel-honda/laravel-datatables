@@ -22,7 +22,7 @@ abstract class Table extends Component
 
     protected $queryString = [
         'sortColumn', 'search',
-        'recordsPerPage' => ['except' => '15'],
+        'recordsPerPage' => ['except' => 15],
         'sortDirection'  => ['except' => 'asc'],
         'page'           => ['except' => 1],
     ];
