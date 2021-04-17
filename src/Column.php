@@ -3,6 +3,7 @@
 namespace Honda\Table;
 
 use Closure;
+use Honda\Table\Components\Concerns\OrdersAccessors;
 use Honda\Table\Concerns\HandlesTypes;
 use Honda\Table\Concerns\ResolvesAttributes;
 use Illuminate\Database\Eloquent\Model;
@@ -12,12 +13,13 @@ class Column
 {
     use HandlesTypes;
     use ResolvesAttributes;
+    use OrdersAccessors;
 
     public string $name;
-    public bool $searchable  = false;
-    public bool $sortable    = true;
-    public bool $copyable    = false;
-    public bool $hidden      = false;
+    public bool $searchable = false;
+    public bool $sortable = true;
+    public bool $copyable = false;
+    public bool $hidden = false;
     protected ?string $label = null;
     protected ?Closure $valueResolver;
 
@@ -85,6 +87,10 @@ class Column
 
     public function renderCell(Model $record)
     {
+        if ($this->sortable && $this->isAccessor($record, $this->name)) {
+            $this->sortable = false;
+        }
+
         if (!$this->shouldRender()) {
             return;
         }
@@ -92,7 +98,7 @@ class Column
         return view('tables::cells.' . Str::of($this->kind)->kebab(), array_merge($this->attributes, [
             'record' => $record,
             'column' => $this,
-            'value'  => $this->getValueFor($record),
+            'value' => $this->getValueFor($record),
         ]));
     }
 

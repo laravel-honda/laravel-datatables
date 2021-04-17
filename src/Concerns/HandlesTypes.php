@@ -15,7 +15,7 @@ trait HandlesTypes
 
     public function asDate(string $format = 'F j, Y'): self
     {
-        $this->kind       = 'date';
+        $this->kind = 'date';
         $this->attributes = compact('format');
 
         return $this;
@@ -23,7 +23,7 @@ trait HandlesTypes
 
     public function asDateTime(string $format = 'F j, Y H:i:s'): self
     {
-        $this->kind       = 'date';
+        $this->kind = 'date';
         $this->attributes = compact('format');
 
         return $this;
@@ -31,7 +31,7 @@ trait HandlesTypes
 
     public function asTime(string $format = 'H:i'): self
     {
-        $this->kind       = 'date';
+        $this->kind = 'date';
         $this->attributes = compact('format');
 
         return $this;
@@ -39,7 +39,7 @@ trait HandlesTypes
 
     public function asBool(string $color = 'blue'): self
     {
-        $this->kind       = 'boolean';
+        $this->kind = 'boolean';
         $this->attributes = compact('color');
 
         return $this;
@@ -47,14 +47,18 @@ trait HandlesTypes
 
     public function asLink(callable $builder = null): self
     {
-        $builder ??= function (Model $model) {
+        $builder ??= function ($model): string {
+            if (!$model instanceof Model) {
+                return $model;
+            }
+
             $name = strtolower(class_basename($model));
 
             return route(Str::plural($name) . '.show', [
                 $name => $model,
             ]);
         };
-        $this->kind       = 'link';
+        $this->kind = 'link';
         $this->attributes = compact('builder');
 
         return $this;
@@ -76,7 +80,7 @@ trait HandlesTypes
 
     public function asImage(string $disk = null, int $height = 40, int $width = null, bool $rounded = false): self
     {
-        $this->kind       = 'image';
+        $this->kind = 'image';
         $this->attributes = compact('disk', 'height', 'width', 'rounded');
 
         return $this;
@@ -84,7 +88,7 @@ trait HandlesTypes
 
     public function asStatus(callable $statusType): self
     {
-        $this->kind       = 'status';
+        $this->kind = 'status';
         $this->attributes = compact('statusType');
 
         return $this;
@@ -92,7 +96,7 @@ trait HandlesTypes
 
     public function asCurrency(string $symbol = '$', string $decimalSeparator = '.', string $thousandsSeparator = ','): self
     {
-        $this->kind       = 'currency';
+        $this->kind = 'currency';
         $this->attributes = compact('symbol', 'decimalSeparator', 'thousandsSeparator');
 
         return $this;
@@ -121,8 +125,8 @@ trait HandlesTypes
 
     public function asCountry(?callable $convertToIso3166 = null): self
     {
-        $convertToIso3166 ??= fn ($_) => $_;
-        $this->kind       = 'country';
+        $convertToIso3166 ??= fn($_) => $_;
+        $this->kind = 'country';
         $this->attributes = compact('convertToIso3166');
 
         return $this;

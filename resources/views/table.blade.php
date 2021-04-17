@@ -18,7 +18,7 @@
                     id="resultsPerPage"
                     name="resultsPerPage"
                     class="form-select block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 text-gray-700"
-                    wire:model="recordsPerPage">
+                    wire:model="perPage">
                     <option value="10">10</option>
                     <option value="15">15</option>
                     <option value="25">25</option>
