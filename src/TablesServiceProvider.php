@@ -3,10 +3,7 @@
 namespace Honda\Table;
 
 use Honda\Table\Commands\TableMakeCommand;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\ServiceProvider;
-use Livewire\Livewire;
-use Symfony\Component\Finder\SplFileInfo;
 
 class TablesServiceProvider extends ServiceProvider
 {
@@ -16,7 +13,6 @@ class TablesServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tables');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tables');
         $this->mergeConfigFrom(__DIR__ . '/../config/tables.php', 'tables');
-
         $this->commands([TableMakeCommand::class]);
 
         if (!$this->app->runningInConsole()) {

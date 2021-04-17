@@ -16,7 +16,7 @@ class TableMakeCommand extends Command
     public function handle(): void
     {
         $model = $this->getModel();
-        $path = sprintf("%s/%sTable.php", config('tables.path'), $model);
+        $path  = sprintf('%s/%sTable.php', config('tables.path'), $model);
 
         if (file_exists($path)) {
             $this->error('View already exists!');
@@ -26,6 +26,7 @@ class TableMakeCommand extends Command
 
         if (!class_exists($fullNamespace = config('tables.models_namespace') . $model)) {
             $this->error("Model does not exist [$fullNamespace]");
+
             return;
         }
 
@@ -49,8 +50,8 @@ class TableMakeCommand extends Command
 
     public function getTableContents(): string
     {
-        $model = $this->getModel();
-        $class = $model . 'Table';
+        $model          = $this->getModel();
+        $class          = $model . 'Table';
         $tableNamespace = config('tables.namespace');
         $modelNamespace = rtrim(config('tables.models_namespace'), '\\');
 

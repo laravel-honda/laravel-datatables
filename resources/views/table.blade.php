@@ -68,7 +68,7 @@
                                             @endif
                                             class="px-6 py-3  @if ($column->sortable) cursor-pointer @endif">
                                             <button @if (!$column->sortable) disabled
-                                                    @endif class="flex items-center text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap">
+                                                    @endif class="flex items-center text-left text-xs font-medium text-gray-500 uppercase tracking-wider whitespace-nowrap focus:outline-none">
                                                 {{ $column->getLabel() }}
 
                                                 @if($column->sortable && $sortColumn === $column->name)
@@ -115,7 +115,7 @@
                                         @elseif($column->shouldRender())
                                             <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="text-gray-500 text-sm">
-                                                @if (empty($record->{$column->name}) && $column->kind !== 'boolean')
+                                                @if (empty($column->getValueFor($record)) && $column->kind !== 'boolean')
                                                     ({{__('blank')}})
                                                 @else
                                                     {{ $column->renderCell($record) }}

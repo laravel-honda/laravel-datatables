@@ -1,4 +1,5 @@
 <div>
+
     @if ($paginator->hasPages())
         <nav role="navigation" aria-label="Pagination Navigation">
             <div class="flex justify-between flex-1 sm:hidden">

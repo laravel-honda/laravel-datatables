@@ -2,44 +2,50 @@
 
 namespace Honda\Table;
 
+use Closure;
 use Honda\Table\Concerns\HandlesTypes;
+use Honda\Table\Concerns\ResolvesAttributes;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Column
 {
     use HandlesTypes;
+    use ResolvesAttributes;
 
     public string $name;
-    public bool $searchable = false;
-    public bool $sortable   = false;
-    public bool $hidden     = false;
-    /** @var callable */
-    public $showLinkGuesser;
+    public bool $searchable  = false;
+    public bool $sortable    = true;
+    public bool $copyable    = false;
+    public bool $hidden      = false;
     protected ?string $label = null;
+    protected ?Closure $valueResolver;
 
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->guessShowLink(function (Model $model) {
-            $name = strtolower(class_basename($model));
-
-            return route(Str::plural($name) . '.show', [
-                $name => $model,
-            ]);
-        });
-    }
-
-    public function guessShowLink(callable $guesser): self
-    {
-        $this->showLinkGuesser = $guesser;
-
-        return $this;
+        $this->valueResolver ??= function (Model $record, Column $column) {
+            return $this->resolveAttribute($record, $column->name);
+        };
     }
 
     public static function make(string $name): self
     {
         return new static($name);
+    }
+
+    public function valueResolver(callable $postProcessor): self
+    {
+        $this->valueResolver = $postProcessor;
+
+        return $this;
+    }
+
+    public function copyable(): self
+    {
+        $this->copyable = true;
+
+        return $this;
     }
 
     public function labeledAs(string $label): self
@@ -77,7 +83,7 @@ class Column
         return $this;
     }
 
-    public function renderCell($record)
+    public function renderCell(Model $record)
     {
         if (!$this->shouldRender()) {
             return;
@@ -86,7 +92,7 @@ class Column
         return view('tables::cells.' . Str::of($this->kind)->kebab(), array_merge($this->attributes, [
             'record' => $record,
             'column' => $this,
-            'value'  => $record->{$this->name},
+            'value'  => $this->getValueFor($record),
         ]));
     }
 
@@ -95,11 +101,9 @@ class Column
         return !$this->hidden;
     }
 
-    public function showLinkFor(Model $model)
+    public function getValueFor(Model $record)
     {
-        $cb = $this->showLinkGuesser;
-
-        return $cb($model);
+        return call_user_func($this->valueResolver, $record, $this);
     }
 
     public function getLabel(): string

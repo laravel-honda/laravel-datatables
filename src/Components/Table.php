@@ -2,9 +2,15 @@
 
 namespace Honda\Table\Components;
 
+use Exception;
 use Honda\Table\Action;
 use Honda\Table\Column;
+use Honda\Table\Concerns\OrdersNestedAttributes;
+use Honda\Table\Concerns\ResolvesAttributes;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -12,8 +18,11 @@ use Livewire\WithPagination;
 abstract class Table extends Component
 {
     use WithPagination;
+    use ResolvesAttributes;
+    use OrdersNestedAttributes;
 
-    protected static string $model;
+    public static string $model;
+
     public $search;
     public $recordsPerPage = 15;
     public $sortColumn     = null;
@@ -64,39 +73,52 @@ abstract class Table extends Component
 
     protected function records(): Builder
     {
+        /** @var Builder $query */
         $query = $this::guessModelClass()::query();
+        $table = $query->getModel()->getTable();
+        $query->select($table . '.*');
 
-        if ($this->search !== null && $this->search !== '' && $this->hasAnySearchableColumns()) {
-            collect($this->columns())
-                ->filter->searchable
-                ->each(function ($column, $index) use (&$query) {
-                    $search = Str::lower($this->search);
+        if (!empty($this->sortColumn)) {
+            if (!str_contains($this->sortColumn, '.')) {
+                $query->orderBy($this->sortColumn, $this->sortDirection);
+            } else {
+                [$relation, $column] = explode('.', $this->sortColumn);
+                $relationObject      = $query->getModel()->{$relation}();
+                $relatedTable        = Str::plural($relation);
 
-                    $first = $index === 0;
-
-                    if (Str::of($column->name)->contains('.')) {
-                        $relationship = (string) Str::of($column->name)->beforeLast('.');
-
-                        $query = $query->{$first ? 'whereHas' : 'orWhereHas'}(
-                            $relationship,
-                            function ($query) use ($column, $search) {
-                                $columnName = (string) Str::of($column->name)->afterLast('.');
-
-                                return $query->whereRaw("LOWER({$columnName}) LIKE ?", ["%{$search}%"]);
-                            },
-                            );
-
-                        return;
-                    }
-
-                    $query = $query->{$first ? 'where' : 'orWhere'}(
-                        fn ($query) => $query->whereRaw("LOWER({$column->name}) LIKE ?", ["%{$search}%"]),
+                switch (get_class($relationObject)) {
+                    case HasMany::class:
+                        $this->orderHasMany(
+                            $relationObject,
+                            $query,
+                            $table,
+                            $relatedTable,
+                            $column,
+                            $this->sortDirection
                         );
-                });
-        }
-
-        if ($this->sortColumn !== '' && $this->sortColumn !== null) {
-            $query->orderBy($this->sortColumn, $this->sortDirection);
+                        break;
+                    case HasOne::class:
+                        $this->orderHasOne(
+                            $query,
+                            $table,
+                            $relatedTable,
+                            $column,
+                            $this->sortDirection
+                        );
+                        break;
+                    case BelongsTo::class:
+                        $this->orderBelongsTo(
+                            $query,
+                            $table,
+                            $relatedTable,
+                            $column,
+                            $this->sortDirection
+                        );
+                        break;
+                    default:
+                        throw new Exception(sprintf('Relation of type [%s}] is not supported', get_class($relationObject)));
+                }
+            }
         }
 
         return $query;
@@ -148,12 +170,17 @@ abstract class Table extends Component
 
     public function render()
     {
-        return view('tables::table', [
+        return view($this->viewName(), [
             'records'  => $this->records()->paginate($this->recordsPerPage),
             'selected' => $this->selected,
             'columns'  => $this->columns(),
             'actions'  => $this->actions(),
         ]);
+    }
+
+    protected function viewName(): string
+    {
+        return 'tables::table';
     }
 
     /**

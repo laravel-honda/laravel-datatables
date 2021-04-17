@@ -2,6 +2,9 @@
 
 namespace Honda\Table\Concerns;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 trait HandlesTypes
 {
     public string $kind = 'default';
@@ -44,7 +47,13 @@ trait HandlesTypes
 
     public function asLink(callable $builder = null): self
     {
-        $builder ??= fn ($_) => $_;
+        $builder ??= function (Model $model) {
+            $name = strtolower(class_basename($model));
+
+            return route(Str::plural($name) . '.show', [
+                $name => $model,
+            ]);
+        };
         $this->kind       = 'link';
         $this->attributes = compact('builder');
 
