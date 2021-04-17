@@ -25,15 +25,15 @@ abstract class Table extends Component
 
     public $search;
     public $recordsPerPage = 15;
-    public $sortColumn     = null;
-    public $sortDirection  = 'asc';
-    public $selected       = [];
+    public $sortColumn = null;
+    public $sortDirection = 'asc';
+    public $selected = [];
 
     protected $queryString = [
         'sortColumn', 'search',
         'recordsPerPage' => ['except' => 15],
-        'sortDirection'  => ['except' => 'asc'],
-        'page'           => ['except' => 1],
+        'sortDirection' => ['except' => 'asc'],
+        'page' => ['except' => 1],
     ];
 
     public function sortBy($column): void
@@ -45,7 +45,7 @@ abstract class Table extends Component
 
                     break;
                 case 'desc':
-                    $this->sortColumn    = null;
+                    $this->sortColumn = null;
                     $this->sortDirection = 'asc';
 
                     break;
@@ -54,7 +54,7 @@ abstract class Table extends Component
             return;
         }
 
-        $this->sortColumn    = $column;
+        $this->sortColumn = $column;
         $this->sortDirection = 'asc';
     }
 
@@ -78,13 +78,42 @@ abstract class Table extends Component
         $table = $query->getModel()->getTable();
         $query->select($table . '.*');
 
+        if ($this->search !== null && $this->search !== '' && $this->hasAnySearchableColumns()) {
+            collect($this->columns())
+                ->filter->searchable
+                ->each(function ($column, $index) use (&$query) {
+                    $search = Str::lower($this->search);
+
+                    $first = $index === 0;
+
+                    if (Str::of($column->name)->contains('.')) {
+                        $relationship = (string)Str::of($column->name)->beforeLast('.');
+
+                        $query = $query->{$first ? 'whereHas' : 'orWhereHas'}(
+                            $relationship,
+                            function ($query) use ($column, $search) {
+                                $columnName = (string)Str::of($column->name)->afterLast('.');
+
+                                return $query->whereRaw("LOWER({$columnName}) LIKE ?", ["%{$search}%"]);
+                            },
+                        );
+
+                        return;
+                    }
+
+                    $query = $query->{$first ? 'where' : 'orWhere'}(
+                        fn($query) => $query->whereRaw("LOWER({$column->name}) LIKE ?", ["%{$search}%"]),
+                    );
+                });
+        }
+
         if (!empty($this->sortColumn)) {
             if (!str_contains($this->sortColumn, '.')) {
                 $query->orderBy($this->sortColumn, $this->sortDirection);
             } else {
                 [$relation, $column] = explode('.', $this->sortColumn);
-                $relationObject      = $query->getModel()->{$relation}();
-                $relatedTable        = Str::plural($relation);
+                $relationObject = $query->getModel()->{$relation}();
+                $relatedTable = Str::plural($relation);
 
                 switch (get_class($relationObject)) {
                     case HasMany::class:
@@ -171,10 +200,10 @@ abstract class Table extends Component
     public function render()
     {
         return view($this->viewName(), [
-            'records'  => $this->records()->paginate($this->recordsPerPage),
+            'records' => $this->records()->paginate($this->recordsPerPage),
             'selected' => $this->selected,
-            'columns'  => $this->columns(),
-            'actions'  => $this->actions(),
+            'columns' => $this->columns(),
+            'actions' => $this->actions(),
         ]);
     }
 
@@ -209,7 +238,7 @@ abstract class Table extends Component
     public function bulkAction(string $action): void
     {
         $records = $this->records()->whereIn('id', $this->selected)->get();
-        $action  = $this->actions()[$action];
+        $action = $this->actions()[$action];
 
         foreach ($records as $record) {
             $action->run($record);
