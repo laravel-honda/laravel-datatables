@@ -271,7 +271,7 @@ abstract class Table extends Component
 
     public function bulkAction(string $action): void
     {
-        $records = $this->records()->whereIn('id', $this->selected)->get();
+        $records = $this->records()->whereIn('id', $this->selected);
         $action = $this->actions()[$action];
 
         foreach ($records as $record) {
