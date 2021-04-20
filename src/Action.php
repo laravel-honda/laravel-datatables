@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Action
 {
     public string $name;
-    public string $icon;
+    public string $icon = '';
     public string $iconSet;
     public bool $supportsBulk = false;
 
@@ -24,7 +24,7 @@ class Action
         return new static($name);
     }
 
-    public function icon(string $icon, string $set = 'heroicon-o'): self
+    public function icon(string $icon, string $set = 'tabler'): self
     {
         $this->icon    = $icon;
         $this->iconSet = $set;
