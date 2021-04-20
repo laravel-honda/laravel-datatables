@@ -81,9 +81,7 @@ abstract class Table extends Component
     {
         $query = $this->getQuery();
         $table = $query->getModel()->getTable();
-        $query->select(collect($this->columns())->map->name->map(function ($name) use ($table) {
-            return $table . '.' . $name;
-        })->implode(','));
+        $query->select($table . '.*');
 
         if (!empty($this->search) && $this->hasAnySearchableColumns()) {
             collect($this->columns())
@@ -204,15 +202,15 @@ abstract class Table extends Component
         return static::$model;
     }
 
-    /**
-     * @return Column[]
-     */
-    abstract public function columns(): array;
-
     public function hasAnySearchableColumns(): bool
     {
         return collect($this->columns())->filter->searchable->isNotEmpty();
     }
+
+    /**
+     * @return Column[]
+     */
+    abstract public function columns(): array;
 
     public function updatedperPage(): void
     {
