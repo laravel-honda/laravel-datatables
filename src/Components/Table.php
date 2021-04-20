@@ -79,10 +79,11 @@ abstract class Table extends Component
 
     protected function records(): LengthAwarePaginator
     {
-        /** @var Builder $query */
-        $query = $this::guessModelClass()::query();
+        $query = $this->getQuery();
         $table = $query->getModel()->getTable();
-        $query->select($table . '.*');
+        $query->select(collect($this->columns())->map->name->map(function ($name) use ($table) {
+            return $table . '.' . $name;
+        })->implode(','));
 
         if (!empty($this->search) && $this->hasAnySearchableColumns()) {
             collect($this->columns())
@@ -187,6 +188,11 @@ abstract class Table extends Component
         );
     }
 
+    protected function getQuery(): Builder
+    {
+        return $this::guessModelClass()::query();
+    }
+
     public static function guessModelClass(): string
     {
         static::$model ??= (config('tables.models_namespace') . str_replace(
@@ -198,15 +204,15 @@ abstract class Table extends Component
         return static::$model;
     }
 
-    public function hasAnySearchableColumns(): bool
-    {
-        return collect($this->columns())->filter->searchable->isNotEmpty();
-    }
-
     /**
      * @return Column[]
      */
     abstract public function columns(): array;
+
+    public function hasAnySearchableColumns(): bool
+    {
+        return collect($this->columns())->filter->searchable->isNotEmpty();
+    }
 
     public function updatedperPage(): void
     {
