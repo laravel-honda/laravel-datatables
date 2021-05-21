@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Action
 {
-    public static string $defaultIcon = 'edit';
+    public static string $defaultIcon = 'tabler-edit';
 
     public function __construct(string $name = 'Delete')
     {

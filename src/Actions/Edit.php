@@ -8,7 +8,7 @@ use Str;
 
 class Edit extends Action
 {
-    public static string $defaultIcon = 'edit';
+    public static string $defaultIcon = 'tabler-edit';
 
     public function __construct(string $name = 'Edit', callable $linkBuilder = null)
     {
