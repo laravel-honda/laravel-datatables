@@ -35,7 +35,7 @@
                     wire:click="bulkAction({{$k}})"
                         class="flex items-center whitespace-nowrap py-2 px-4 border border-gray-300 rounded-lg ml-4 focus:outline-none focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50 @if (count($selected) === 0) bg-gray-100 text-gray-500 @else bg-white text-gray-700 @endif">
                         <x-dynamic-component
-                            :component="$action->iconSet . '-' . $action->icon"
+                            :component="$action->icon"
                             class="w-5 h-5 text-gray-400"/>
                         <span class="inline-block ml-2">{{ $action->name }} </span>
                     </button>
@@ -106,7 +106,7 @@
                                                                 wire:click="action({{ $record->getKey() }}, {{ $k }})">
                                                             @if ($action->icon)
                                                                 <x-dynamic-component
-                                                                    :component="$action->iconSet . '-' . $action->icon"
+                                                                    :component="$action->icon"
                                                                     class="w-5 h-5 text-gray-400"/>
                                                             @endif
                                                             <span class="inline-block ml-1">{{ $action->name }}</span>
