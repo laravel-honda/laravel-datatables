@@ -7,12 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Delete extends Action
 {
+    public static string $defaultIcon = 'edit';
+
     public function __construct(string $name = 'Delete')
     {
         parent::__construct($name);
 
         $this->supportsBulk()
-            ->icon('trash')
+            ->icon(static::$defaultIcon)
             ->execute(function (Model $model) {
                 $model->delete();
             });

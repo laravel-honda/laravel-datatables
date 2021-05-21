@@ -8,7 +8,6 @@ class Action
 {
     public string $name;
     public string $icon = '';
-    public string $iconSet;
     public bool $supportsBulk = false;
 
     /** @var callable */
@@ -24,10 +23,9 @@ class Action
         return new static($name);
     }
 
-    public function icon(string $icon, string $set = 'tabler'): self
+    public function icon(string $icon): self
     {
         $this->icon    = $icon;
-        $this->iconSet = $set;
 
         return $this;
     }
