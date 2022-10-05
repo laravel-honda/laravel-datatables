@@ -24,7 +24,7 @@
         "friendsofphp/php-cs-fixer": "^3",
         "orchestra/testbench": "^6.13",
         "pestphp/pest": "^1.0.5",
-        "phpstan/phpstan": "^0.12.48",
+        "phpstan/phpstan": "^1.8.7",
         "symfony/var-dumper": "^5.2.0"
     },
     "autoload": {
